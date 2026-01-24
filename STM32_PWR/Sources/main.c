@@ -8,6 +8,7 @@
 #define EXTI_BASE 0x40010400
 #define NVIC_BASE 0xE000E100
 #define PWR_BASE 0x40007000
+#define RTC_BASE 0x40002800
 
 
 void PWR_Config();
@@ -39,7 +40,7 @@ int main(void)
    {
 	  WKUPTimerValue = *(volatile uint32_t*)(0xE000E010+0x08);
 	  currentTimerValue = *(volatile uint32_t*)(0xE000E010+0x08);
-	  while(WKUPTimerValue - currentTimerValue < 1000*10000){
+	  while(WKUPTimerValue - currentTimerValue < 1000*5000){
 		  currentTimerValue = *(volatile uint32_t*)(0xE000E010+0x08);
 		  if(lastTimerValue - currentTimerValue >= 1000*delay){
 			  lastTimerValue = currentTimerValue;
@@ -58,6 +59,11 @@ void SystemClock_Config(void)
 {
 	*(volatile uint32_t*)(RCC_BASE+0x00) |= (1);
 	*(volatile uint32_t*)(RCC_BASE+0x18) |= (1<<4)|(1<<2)|(1);
+
+	//RTC
+	*(volatile uint32_t*)(RTC_BASE+0x00) |= (1<<1);
+	while((*(volatile uint32_t*)(RTC_BASE+0x04)&(1<<5))=0){} //RTOFF
+	*(volatile uint32_t*)(RTC_BASE+0x04) |= (1<<4);
 
 
 }
