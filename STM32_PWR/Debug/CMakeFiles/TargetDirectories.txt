@@ -1,0 +1,3 @@
+C:/Users/admin/Desktop/EE/STM32/STM_work/STM32_PWR/Debug/CMakeFiles/STM32_PWR.dir
+C:/Users/admin/Desktop/EE/STM32/STM_work/STM32_PWR/Debug/CMakeFiles/edit_cache.dir
+C:/Users/admin/Desktop/EE/STM32/STM_work/STM32_PWR/Debug/CMakeFiles/rebuild_cache.dir

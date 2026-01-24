@@ -7,8 +7,10 @@
 #define GPIOA_BASE 0x40010800
 #define EXTI_BASE 0x40010400
 #define NVIC_BASE 0xE000E100
+#define PWR_BASE 0x40007000
 
 
+void PWR_Config();
 void SystemClock_Config(void);
 static void GPIO_Init(void);
 void EXTI0_CallBack();
@@ -20,6 +22,7 @@ int main(void)
 
 
   SystemClock_Config();
+  PWR_Config();
   *(volatile uint32_t*)(0xE000E010+0x00) |= (0x01);
   *(volatile uint32_t*)(0xE000E010+0x04) |= (0x00FFFFFF);
 
@@ -29,15 +32,22 @@ int main(void)
 
   uint32_t lastTimerValue = *(volatile uint32_t*)(0xE000E010+0x08);
   uint32_t currentTimerValue;
+  uint32_t WKUPTimerValue;
 
 
    while (1)
    {
+	  WKUPTimerValue = *(volatile uint32_t*)(0xE000E010+0x08);
 	  currentTimerValue = *(volatile uint32_t*)(0xE000E010+0x08);
- 	  if(lastTimerValue - currentTimerValue >= 1000*delay){
- 		  lastTimerValue = currentTimerValue;
- 		  *(volatile uint32_t*)(GPIOC_BASE+0x0C) ^= (1 << 13);
+	  while(WKUPTimerValue - currentTimerValue < 1000*10000){
+		  currentTimerValue = *(volatile uint32_t*)(0xE000E010+0x08);
+		  if(lastTimerValue - currentTimerValue >= 1000*delay){
+			  lastTimerValue = currentTimerValue;
+			  *(volatile uint32_t*)(GPIOC_BASE+0x0C) ^= (1 << 13);
  	  }
+	  }
+ 	 __asm volatile ("WFI");
+
 
   }
 
@@ -63,7 +73,7 @@ static void GPIO_Init(void)
 
 	// EXTI
 	*(volatile uint32_t*)(EXTI_BASE+0x00) |= (1);
-	*(volatile uint32_t*)(EXTI_BASE+0x08) |= (1);
+	//*(volatile uint32_t*)(EXTI_BASE+0x08) |= (1); rising edge
 	*(volatile uint32_t*)(EXTI_BASE+0x0C) |= (1);
 
 	// GPIO
@@ -77,11 +87,20 @@ void EXTI0_IRQHandler(){
 }
 
 void EXTI0_CallBack(){
-
+/*
 	if(*(volatile uint32_t*)(GPIOA_BASE+0x08)&(1)){
 		delay = 500;
 	}
 	else{
 		delay = 250;
 	}
+	*/
 }
+void PWR_Config(){
+	*(volatile uint32_t*)(PWR_BASE+0x00) |= (1);
+
+
+}
+
+
+
