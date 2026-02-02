@@ -47,6 +47,7 @@ int main(void)
 			  *(volatile uint32_t*)(GPIOC_BASE+0x0C) ^= (1 << 13);
  	  }
 	  }
+	  *(volatile uint32_t*)(GPIOC_BASE+0x0C) |= (1 << 13);
  	 __asm volatile ("WFI");
 
 
@@ -62,7 +63,7 @@ void SystemClock_Config(void)
 
 	//RTC
 	*(volatile uint32_t*)(RTC_BASE+0x00) |= (1<<1);
-	while((*(volatile uint32_t*)(RTC_BASE+0x04)&(1<<5))=0){} //RTOFF
+	while((*(volatile uint32_t*)(RTC_BASE+0x04)&(1<<5))==0){} //RTOFF
 	*(volatile uint32_t*)(RTC_BASE+0x04) |= (1<<4);
 
 
