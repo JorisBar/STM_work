@@ -62,10 +62,11 @@ void SystemClock_Config(void)
 	*(volatile uint32_t*)(RCC_BASE+0x18) |= (1<<4)|(1<<2)|(1);
 
 	//RTC
+	/*
 	*(volatile uint32_t*)(RTC_BASE+0x00) |= (1<<1);
 	while((*(volatile uint32_t*)(RTC_BASE+0x04)&(1<<5))==0){} //RTOFF
 	*(volatile uint32_t*)(RTC_BASE+0x04) |= (1<<4);
-
+*/
 
 }
 
