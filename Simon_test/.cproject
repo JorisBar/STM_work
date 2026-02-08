@@ -44,6 +44,7 @@
 									<listOptionValue builtIn="false" value="../Inc"/>
 									<listOptionValue builtIn="false" value="&quot;C:\ST\STM32Cube_FW_F1_V1.8.0\Drivers\CMSIS\Device\ST\STM32F1xx\Include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;C:\ST\STM32Cube_FW_F1_V1.8.0\Drivers\CMSIS\Core\Include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\ST\STM32Cube_FW_F1_V1.8.0\Drivers\CMSIS\Device\ST\cmsis-device-f0-master\Include&quot;"/>
 								</option>
 								<inputType id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c.1134393297" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c"/>
 							</tool>

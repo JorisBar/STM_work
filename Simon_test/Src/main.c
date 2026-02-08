@@ -1,5 +1,5 @@
 // Simon_test
-#include "stm32f103x6.h"
+#include "stm32f030x6.h"
 #include <stdint.h>
 
 
@@ -27,7 +27,7 @@ int main(void)
 	  currentTimerValue = SysTick->VAL;
 	  if(lastTimerValue - currentTimerValue >= 1000*1000){
 		  lastTimerValue = currentTimerValue;
-		  GPIOC->ODR ^= (0x01 << 13);
+		  GPIOC->ODR ^= (0x01 << 14);
 	   	  }
 
   }
@@ -38,14 +38,14 @@ int main(void)
 void SystemClock_Config(void)
 {
 	RCC->CR |= (1);
-	RCC->APB2ENR |= (1<<4)|(1<<2)|(1);
+	RCC->AHBENR |= (1<<19);
 
 }
 
 void GPIO_Init(){
 
-	GPIOC->CRH &= ~(0x03 << 22);
-	GPIOC->CRH ^= (0x02 << 20);
+	GPIOC->MODER |= (1<<28);
+
 
 }
 
