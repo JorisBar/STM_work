@@ -19,7 +19,7 @@ int main(void)
   SysTick->CTRL |= (0x01);
   SysTick->LOAD |= (0x00FFFFFF);
 
-  uint32_t lastTimerValue = *(volatile uint32_t*)(0xE000E010+0x08);
+  uint32_t lastTimerValue = SysTick->VAL;
   uint32_t currentTimerValue;
 
   while (1)
@@ -27,7 +27,7 @@ int main(void)
 	  currentTimerValue = SysTick->VAL;
 	  if(lastTimerValue - currentTimerValue >= 1000*1000){
 		  lastTimerValue = currentTimerValue;
-		  GPIOC->ODR ^= (0x01 << 14);
+		  GPIOC->ODR ^= (1 << 14);
 	   	  }
 
   }
