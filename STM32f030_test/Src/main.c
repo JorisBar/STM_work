@@ -19,13 +19,13 @@ volatile uint8_t bcd;
 volatile uint8_t seconds;
 
 
-volatile uint32_t debug_ALRMAR;
-volatile uint32_t debug_TR;
+
 
 int main(void)
 {
 
-
+volatile uint32_t debug_ALRMAR;
+volatile uint32_t debug_TR;
   SystemClock_Config();
   GPIO_Init();
   EXTI_Init();
@@ -58,9 +58,12 @@ int main(void)
 void SystemClock_Config(void)
 {
 	RCC->CR |= (1);
+	RCC->CSR |= RCC_CSR_LSION;
+	while (!(RCC->CSR & RCC_CSR_LSIRDY));
 	RCC->AHBENR |= RCC_AHBENR_GPIOCEN;
 	RCC->APB2ENR |= RCC_APB2ENR_SYSCFGEN;
-	RCC->BDCR |= RCC_BDCR_RTCEN|RCC_BDCR_RTCSEL_LSI;
+	RCC->BDCR |= RCC_BDCR_RTCSEL_LSI;
+	RCC->BDCR |= RCC_BDCR_RTCEN;
 
 }
 
@@ -96,20 +99,25 @@ void EXTI_4_15_CallBack(){
 }
 
 void RTC_Init(){
-	debug_ALRMAR = RTC->ALRMAR;
-	debug_TR = RTC->TR;
+	//debug_ALRMAR = RTC->ALRMAR;
+	//debug_TR = RTC->TR;
 
 	RTC->WPR = 0xCA;
 	RTC->WPR = 0x53;
 
+	RTC->ISR |= RTC_ISR_ALRAF;
+
 	RTC->CR &= ~RTC_CR_ALRAE;
 	while(!(RTC->ISR & RTC_ISR_ALRAWF));
 
-	debug_ALRMAR = RTC->ALRMAR;
-	debug_TR = RTC->TR;
+	//debug_ALRMAR = RTC->ALRMAR;
+	//debug_TR = RTC->TR;
 
 	RTC->PRER = (0x7F << RTC_PRER_PREDIV_A_Pos);
 	RTC->PRER |= (0xFF << RTC_PRER_PREDIV_S_Pos);
+
+	RTC->ISR &= ~RTC_ISR_RSF;
+	while (!(RTC->ISR & RTC_ISR_RSF));
 
 
 	RTC->ALRMAR |= RTC_ALRMAR_MSK4_Msk|RTC_ALRMAR_MSK3_Msk|RTC_ALRMAR_MSK2_Msk;
@@ -122,8 +130,8 @@ void RTC_Init(){
 
 	RTC->ALRMASSR |= (8 << RTC_ALRMASSR_MASKSS_Pos);
 
-	RTC->ALRMASSR &= ~RTC_ALRMASSR_SS_Msk;
-	RTC->ALRMASSR |= RTC->SSR;
+	RTC->ALRMASSR = (RTC->ALRMASSR & RTC_ALRMASSR_MASKSS_Msk) | (RTC->SSR & RTC_ALRMASSR_SS_Msk);
+
 
 
 
@@ -162,5 +170,6 @@ uint8_t new_bcd_time(uint8_t delay){
 	}
 	return ((seconds/10) << 4)|(seconds % 10);
 }
+
 
 
