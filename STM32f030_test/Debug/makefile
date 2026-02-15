@@ -59,8 +59,8 @@ all: main-build
 main-build: STM32f030_test.elf secondary-outputs
 
 # Tool invocations
-STM32f030_test.elf STM32f030_test.map: $(OBJS) $(USER_OBJS) C:\Users\joriukas\ kebabiukas\OneDrive\Desktop\EE\ projektai\STM32\STM_work\STM32f030_test\STM32F030C6TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "STM32f030_test.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m0 -T"C:\Users\joriukas kebabiukas\OneDrive\Desktop\EE projektai\STM32\STM_work\STM32f030_test\STM32F030C6TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32f030_test.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+STM32f030_test.elf STM32f030_test.map: $(OBJS) $(USER_OBJS) C:\Users\admin\Desktop\EE\STM32\STM_work\STM32f030_test\STM32F030C6TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "STM32f030_test.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m0 -T"C:\Users\admin\Desktop\EE\STM32\STM_work\STM32f030_test\STM32F030C6TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32f030_test.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
